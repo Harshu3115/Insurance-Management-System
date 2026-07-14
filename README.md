@@ -216,17 +216,6 @@ X-Auth-Token: xxxxxxxxxxxxxxxxx
 
 ---
 
-# 📷 Screenshots
-
-- Login Page
-- Dashboard
-- Customer Management
-- Policy Management
-- Lead Management
-- Reports Dashboard
-
-(Add screenshots here)
-
 ---
 
 # 🎯 Future Enhancements
