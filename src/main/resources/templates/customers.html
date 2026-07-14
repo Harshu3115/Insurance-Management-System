@@ -1,0 +1,653 @@
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Customer Management</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+	<style>
+	/* ==========================================================================
+	   Insurance Management System — Customer Management
+	   Navy #12294F · Slate #1A3A6B · Gold #C9A24B · Mist #EEF2F7 · Ink #1B2430
+	   Fraunces (display) · Inter (body/UI) · IBM Plex Mono (utility/meta)
+	   ========================================================================== */
+	
+	@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+	
+	:root{
+	    --navy:#12294f;
+	    --slate:#1a3a6b;
+	    --gold:#c9a24b;
+	    --gold-soft:#e6d3a3;
+	    --mist:#eef2f7;
+	    --ink:#1b2430;
+	    --muted:#6f8aa8;
+	    --success:#1c7c54;
+	    --success-soft:#e5f3ec;
+	    --warning:#b9812f;
+	    --warning-soft:#faf1e2;
+	    --danger:#c0392b;
+	    --danger-soft:#fbe9e7;
+	    --sidebar-w:272px;
+	}
+	
+	*{ box-sizing:border-box; }
+	
+	body{
+	    margin:0;
+	    background:var(--mist);
+	    font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+	    color:var(--ink);
+	}
+	
+	/* --------------------------------- sidebar ---------------------------------- */
+	
+	.sidebar{
+	    position:fixed;
+	    top:0; left:0; bottom:0;
+	    width:var(--sidebar-w);
+	    background:linear-gradient(180deg, var(--navy) 0%, #0c1c38 100%);
+	    display:flex;
+	    flex-direction:column;
+	    z-index:20;
+	    overflow-y:auto;
+	}
+	
+	.sidebar-brand{
+	    display:flex;
+	    align-items:center;
+	    gap:12px;
+	    padding:26px 24px;
+	    border-bottom:1px solid rgba(255,255,255,.08);
+	}
+	
+	.sidebar-brand .mark{
+	    width:38px; height:38px;
+	    border-radius:10px;
+	    background:rgba(201,162,75,.16);
+	    display:flex; align-items:center; justify-content:center;
+	    color:var(--gold-soft);
+	    font-size:1.1rem;
+	    flex:none;
+	}
+	
+	.sidebar-brand span{
+	    font-family:'Fraunces', Georgia, serif;
+	    font-weight:600;
+	    font-size:1.05rem;
+	    line-height:1.25;
+	    color:#fff;
+	}
+	
+	.sidebar-nav{
+	    padding:20px 16px;
+	    flex:1;
+	}
+	
+	.sidebar-nav .nav-link{
+	    display:flex;
+	    align-items:center;
+	    gap:12px;
+	    padding:12px 16px;
+	    margin-bottom:4px;
+	    border-radius:10px;
+	    color:#b9c6dd;
+	    font-weight:500;
+	    font-size:.95rem;
+	    transition:background .16s ease, color .16s ease;
+	}
+	
+	.sidebar-nav .nav-link i{ width:18px; text-align:center; font-size:.95rem; }
+	
+	.sidebar-nav .nav-link:hover{
+	    background:rgba(255,255,255,.06);
+	    color:#fff;
+	}
+	
+	.sidebar-nav .nav-link.active{
+	    background:linear-gradient(135deg, var(--gold), #b9812f);
+	    color:#1b1300;
+	    box-shadow:0 8px 18px -8px rgba(201,162,75,.6);
+	}
+	
+	.sidebar-section-label{
+	    text-transform:uppercase;
+	    font-size:.7rem;
+	    letter-spacing:.1em;
+	    color:#5f7292;
+	    padding:18px 16px 8px;
+	    font-family:'IBM Plex Mono', monospace;
+	}
+	
+	/* ------------------------------- main column -------------------------------- */
+	
+	.main{
+	    margin-left:var(--sidebar-w);
+	    min-height:100vh;
+	    display:flex;
+	    flex-direction:column;
+	}
+	
+	.topbar{
+	    background:#fff;
+	    border-bottom:1px solid #e3e9f0;
+	    padding:18px 32px;
+	    display:flex;
+	    align-items:center;
+	    justify-content:space-between;
+	    position:sticky;
+	    top:0;
+	    z-index:10;
+	}
+	
+	.menu-toggle{
+	    background:none; border:none;
+	    color:var(--navy);
+	    font-size:1.15rem;
+	    cursor:pointer;
+	}
+	
+	.topbar-right{
+	    display:flex;
+	    align-items:center;
+	    gap:22px;
+	}
+	
+	.notif-btn{
+	    position:relative;
+	    background:none;
+	    border:none;
+	    font-size:1.1rem;
+	    color:var(--navy);
+	    cursor:pointer;
+	}
+	
+	.notif-btn .badge-dot{
+	    position:absolute;
+	    top:-6px; right:-8px;
+	    background:var(--danger);
+	    color:#fff;
+	    font-size:.65rem;
+	    font-weight:700;
+	    width:18px; height:18px;
+	    border-radius:50%;
+	    display:flex; align-items:center; justify-content:center;
+	    border:2px solid #fff;
+	}
+	
+	.user-chip{
+	    display:flex;
+	    align-items:center;
+	    gap:10px;
+	    background:none;
+	    border:none;
+	    color:var(--ink);
+	    font-weight:500;
+	    cursor:pointer;
+	}
+	
+	.user-chip .avatar{
+	    width:36px; height:36px;
+	    border-radius:50%;
+	    background:linear-gradient(135deg, var(--navy), var(--slate));
+	    color:#fff;
+	    display:flex; align-items:center; justify-content:center;
+	    font-size:.95rem;
+	    font-weight:600;
+	}
+	
+	.user-chip .role-tag{
+	    color:var(--gold);
+	    font-family:'IBM Plex Mono', monospace;
+	    font-weight:600;
+	    letter-spacing:.02em;
+	}
+	
+	.content{
+	    padding:36px 32px 48px;
+	    flex:1;
+	}
+	
+	.page-head{
+	    display:flex;
+	    align-items:baseline;
+	    justify-content:space-between;
+	    flex-wrap:wrap;
+	    gap:10px;
+	    margin-bottom:26px;
+	}
+	
+	.page-title{
+	    font-family:'Fraunces', Georgia, serif;
+	    font-weight:700;
+	    font-size:2rem;
+	    letter-spacing:-.01em;
+	    color:var(--navy);
+	    margin:0;
+	}
+	
+	.breadcrumb-trail{
+	    font-size:.9rem;
+	    color:var(--muted);
+	}
+	
+	.breadcrumb-trail a{
+	    color:var(--muted);
+	    text-decoration:none;
+	}
+	
+	.breadcrumb-trail span{
+	    color:var(--slate);
+	    font-weight:600;
+	}
+	
+	/* toolbar */
+	
+	.toolbar-card{
+	    background:#fff;
+	    border-radius:14px;
+	    box-shadow:0 4px 14px -8px rgba(18,41,79,.12);
+	    padding:22px 24px;
+	    margin-bottom:24px;
+	    display:flex;
+	    align-items:center;
+	    justify-content:space-between;
+	    gap:16px;
+	    flex-wrap:wrap;
+	}
+	
+	.toolbar-left{
+	    display:flex;
+	    align-items:center;
+	    gap:10px;
+	    flex:1;
+	    min-width:280px;
+	}
+	
+	.search-wrap{
+	    position:relative;
+	    flex:1;
+	    min-width:220px;
+	}
+	
+	.search-wrap i{
+	    position:absolute;
+	    left:16px; top:50%;
+	    transform:translateY(-50%);
+	    color:var(--muted);
+	    font-size:.9rem;
+	}
+	
+	.search-wrap input{
+	    width:100%;
+	    padding:11px 16px 11px 42px;
+	    border:1.5px solid #e3e9f0;
+	    border-radius:9px;
+	    background:var(--mist);
+	    font-size:.92rem;
+	    transition:border-color .16s ease, background .16s ease;
+	}
+	
+	.search-wrap input:focus{
+	    outline:none;
+	    background:#fff;
+	    border-color:var(--slate);
+	    box-shadow:0 0 0 4px rgba(26,58,107,.1);
+	}
+	
+	.btn-tool{
+	    border:none;
+	    border-radius:9px;
+	    padding:11px 20px;
+	    font-weight:600;
+	    font-size:.9rem;
+	    display:inline-flex;
+	    align-items:center;
+	    gap:8px;
+	    white-space:nowrap;
+	    transition:box-shadow .18s ease, background .18s ease, transform .18s ease;
+	}
+	
+	.btn-tool:active{ transform:translateY(1px); }
+	
+	.btn-search{
+	    background:linear-gradient(135deg, var(--navy), var(--slate));
+	    color:#fff;
+	}
+	.btn-search:hover{ box-shadow:0 10px 20px -8px rgba(26,58,107,.5); color:#fff; }
+	
+	.btn-reset{
+	    background:#eef1f5;
+	    color:var(--ink);
+	    border:1px solid #dde4ec;
+	}
+	.btn-reset:hover{ background:#e4e9ef; }
+	
+	.btn-add{
+	    background:linear-gradient(135deg, #1c7c54, #26996a);
+	    color:#fff;
+	}
+	.btn-add:hover{ box-shadow:0 10px 20px -8px rgba(28,124,84,.45); color:#fff; }
+	
+	/* table */
+	
+	.table-card{
+	    background:#fff;
+	    border-radius:14px;
+	    box-shadow:0 4px 14px -8px rgba(18,41,79,.12);
+	    overflow:hidden;
+	}
+	
+	table.customers{
+	    width:100%;
+	    border-collapse:collapse;
+	}
+	
+	table.customers thead th{
+	    background:#eaf0fb;
+	    color:var(--slate);
+	    font-size:.82rem;
+	    text-transform:uppercase;
+	    letter-spacing:.04em;
+	    font-weight:700;
+	    padding:16px 20px;
+	    text-align:left;
+	    border-bottom:1px solid #dde6f2;
+	}
+	
+	table.customers tbody td{
+	    padding:16px 20px;
+	    font-size:.94rem;
+	    border-bottom:1px solid #eef1f6;
+	    color:var(--ink);
+	    vertical-align:middle;
+	}
+	
+	table.customers tbody tr:hover{
+	    background:#f7f9fc;
+	}
+	
+	.status-pill{
+	    display:inline-block;
+	    padding:4px 12px;
+	    border-radius:20px;
+	    font-size:.78rem;
+	    font-weight:700;
+	}
+	
+	.status-pill.active{ background:var(--success-soft); color:var(--success); }
+	.status-pill.inactive{ background:var(--danger-soft); color:var(--danger); }
+	
+	.action-btn{
+	    border:none;
+	    border-radius:7px;
+	    padding:7px 14px;
+	    font-size:.82rem;
+	    font-weight:600;
+	    color:#fff;
+	    display:inline-flex;
+	    align-items:center;
+	    gap:6px;
+	    transition:box-shadow .16s ease, transform .16s ease;
+	}
+	
+	.action-btn:active{ transform:translateY(1px); }
+	
+	.action-btn.edit{ background:linear-gradient(135deg, var(--gold), var(--warning)); margin-right:8px; }
+	.action-btn.edit:hover{ box-shadow:0 8px 16px -8px rgba(185,129,47,.5); }
+	
+	.action-btn.delete{ background:linear-gradient(135deg, #c0392b, #a5281c); }
+	.action-btn.delete:hover{ box-shadow:0 8px 16px -8px rgba(192,57,43,.5); }
+	
+	/* footer / pagination row */
+	
+	.table-footer{
+	    display:flex;
+	    align-items:center;
+	    justify-content:space-between;
+	    flex-wrap:wrap;
+	    gap:12px;
+	    padding:18px 24px;
+	    font-size:.88rem;
+	    color:var(--muted);
+	}
+	
+	.pagination-controls{
+	    display:flex;
+	    align-items:center;
+	    gap:6px;
+	}
+	
+	.page-btn{
+	    border:1px solid #dde4ec;
+	    background:#fff;
+	    color:var(--ink);
+	    border-radius:7px;
+	    padding:7px 14px;
+	    font-size:.85rem;
+	    font-weight:600;
+	    transition:background .15s ease, color .15s ease;
+	}
+	
+	.page-btn:hover{ background:#eef1f5; }
+	
+	.page-btn.active{
+	    background:var(--slate);
+	    color:#fff;
+	    border-color:var(--slate);
+	}
+	
+	.dash-footer{
+	    text-align:center;
+	    color:var(--muted);
+	    font-size:.85rem;
+	    padding:30px 0 8px;
+	}
+	
+	/* focus & motion */
+	
+	a:focus-visible, button:focus-visible, input:focus-visible{
+	    outline:3px solid var(--gold);
+	    outline-offset:2px;
+	}
+	
+	@media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+	
+	/* responsive */
+	
+	@media (max-width:991px){
+	    .sidebar{
+	        transform:translateX(-100%);
+	        transition:transform .25s ease;
+	        box-shadow:20px 0 40px rgba(0,0,0,.25);
+	    }
+	    .sidebar.open{ transform:translateX(0); }
+	    .main{ margin-left:0; }
+	}
+	
+	@media (max-width:768px){
+	    .table-card{ overflow-x:auto; }
+	    table.customers{ min-width:820px; }
+	}
+	
+	@media (max-width:576px){
+	    .content{ padding:26px 18px 40px; }
+	    .topbar{ padding:16px 18px; }
+	    .page-title{ font-size:1.5rem; }
+	    .toolbar-left{ flex-direction:column; align-items:stretch; }
+	}
+	</style>
+	</head>
+	<body>
+	
+	<!-- Sidebar -->
+	<aside class="sidebar" id="sidebar">
+	  <div class="sidebar-brand">
+	    <div class="mark"><i class="fa-solid fa-shield-halved"></i></div>
+	    <span>Insurance Management<br>System</span>
+	  </div>
+	
+	  <nav class="sidebar-nav">
+	    <a href="/dashboard" class="nav-link"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+	    <a href="/customers" class="nav-link active"><i class="fa-solid fa-users"></i> Customers</a>
+	    <a href="/policies" class="nav-link"><i class="fa-solid fa-file-contract"></i> Policies</a>
+	    <a href="/leads" class="nav-link"><i class="fa-solid fa-user-plus"></i> Leads</a>
+	    <a href="/reports" class="nav-link"><i class="fa-solid fa-chart-column"></i> Reports</a>
+	
+	   
+	    <a href="#" class="nav-link" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+	  </nav>
+	</aside>
+	
+	<!-- Main -->
+	<div class="main">
+	
+	  <!-- Topbar -->
+	  <div class="topbar">
+	    <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">
+	      <i class="fa-solid fa-bars"></i>
+	    </button>
+	
+	    <div class="topbar-right">
+	      <button class="notif-btn">
+	        <i class="fa-solid fa-bell"></i>
+	        <span class="badge-dot">3</span>
+	      </button>
+	
+	      <div class="dropdown">
+	        <button class="user-chip dropdown-toggle" data-bs-toggle="dropdown">
+	          <span class="avatar" id="avatar-initial">A</span>
+	          Welcome, <span class="role-tag" id="role"></span>
+	        </button>
+	        <ul class="dropdown-menu dropdown-menu-end">
+	          <li><a class="dropdown-item" href="/profile">Profile</a></li>
+	          <li><a class="dropdown-item" href="/change-password">Change Password</a></li>
+	          <li><hr class="dropdown-divider"></li>
+	          <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+	        </ul>
+	      </div>
+	    </div>
+	  </div>
+	
+	  <!-- Content -->
+	  <div class="content">
+	    <div class="page-head">
+	      <h1 class="page-title">Customer Management</h1>
+	      <div class="breadcrumb-trail"><a href="/dashboard">Home</a> / <span>Customers</span></div>
+	    </div>
+	
+	    <!-- Toolbar -->
+	    <div class="toolbar-card">
+	      <div class="toolbar-left">
+	        <div class="search-wrap">
+	          <i class="fa-solid fa-magnifying-glass"></i>
+	          <input type="text" id="searchInput" placeholder="Search customer by name, email or phone...">
+	        </div>
+	        <button class="btn-tool btn-search" onclick="filterTable()"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+	        <button class="btn-tool btn-reset" onclick="resetSearch()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+	      </div>
+	      <a href="/customer-form" class="btn-tool btn-add text-decoration-none">
+	    <i class="fa-solid fa-plus"></i>
+	    Add Customer
+	</a>
+	    </div>
+	
+	
+	<div id="successToast"
+	     class="alert alert-success"
+	     style="display:none;">
+	</div>
+	    <!-- Table -->
+	    <div class="table-card">
+	      <table class="customers">
+	        <thead>
+	          <tr>
+	            <th>ID</th>
+	            <th>First Name</th>
+	            <th>Last Name</th>
+	            <th>Email</th>
+	            <th>Phone</th>
+	            <th>Status</th>
+	            <th>Action</th>
+	          </tr>
+	        </thead>
+	        <tbody id="customerBody">
+	</tbody>
+	      </table>
+	
+	      <div class="table-footer">
+	        <span id="entryCount">Showing 1 to 7 of 7 entries</span>
+	        <div class="pagination-controls">
+	          <button class="page-btn">Previous</button>
+	          <button class="page-btn active">1</button>
+	          <button class="page-btn">Next</button>
+	        </div>
+	      </div>
+	    </div>
+	
+	    <div class="dash-footer">&copy; <span id="year"></span> Insurance Management System. All rights reserved.</div>
+	  </div>
+	</div>
+	
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="/js/customer.js"></script>
+	<script>
+	  var role = localStorage.getItem("role") || "ADMIN";
+	  document.getElementById("role").innerHTML = role;
+	  document.getElementById("avatar-initial").innerHTML = role.charAt(0).toUpperCase();
+	  document.getElementById("year").innerHTML = new Date().getFullYear();
+	
+	  function logout(){
+	    localStorage.removeItem("token");
+	    localStorage.removeItem("role");
+	    window.location.href = "/";
+	  }
+	
+	  function filterTable(){
+	    var q = document.getElementById("searchInput").value.trim().toLowerCase();
+	    var rows = document.querySelectorAll("#customerBody tr");
+	    var visible = 0;
+	    rows.forEach(function(row){
+	      var text = row.innerText.toLowerCase();
+	      var match = text.indexOf(q) !== -1;
+	      row.style.display = match ? "" : "none";
+	      if (match) visible++;
+	    });
+	    document.getElementById("entryCount").innerText =
+	      "Showing " + visible + " to " + visible + " of " + rows.length + " entries";
+	  }
+	
+	  function resetSearch(){
+	    document.getElementById("searchInput").value = "";
+	    filterTable();
+	  }
+	  
+	  
+	  const message = sessionStorage.getItem("customerSuccess");
+
+	  if(message){
+
+	      const toast = document.getElementById("successToast");
+
+	      toast.innerHTML = `
+	      
+	          ${message}
+	      `;
+
+	      toast.style.display = "block";
+
+	      sessionStorage.removeItem("customerSuccess");
+
+	      setTimeout(function(){
+
+	          toast.style.display = "none";
+
+	      },3000);
+
+	  }
+	</script>
+	
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	</body>
+	</html>

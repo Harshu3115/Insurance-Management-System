@@ -1,0 +1,322 @@
+/* ==========================================================================
+   Insurance Portal — Secure Login
+   Palette:  Deep Navy #12294F · Slate Blue #1A3A6B · Warm Gold #C9A24B
+             Mist #EEF2F7 · Ink #1B2430 · Muted Slate #6F8AA8
+   Type:     Fraunces (display) · Inter (body/UI) · IBM Plex Mono (utility)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --navy: #12294f;
+  --slate: #1a3a6b;
+  --gold: #c9a24b;
+  --gold-soft: #e6d3a3;
+  --mist: #eef2f7;
+  --ink: #1b2430;
+  --muted: #6f8aa8;
+  --white: #ffffff;
+  --radius-lg: 20px;
+  --radius-sm: 10px;
+  --shadow-card: 0 30px 60px -20px rgba(18, 41, 79, 0.35), 0 8px 24px -8px rgba(18, 41, 79, 0.18);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(1100px 700px at 12% -10%, rgba(201, 162, 75, 0.10), transparent 60%),
+    radial-gradient(900px 600px at 110% 110%, rgba(26, 58, 107, 0.18), transparent 55%),
+    linear-gradient(160deg, #0d1f3d 0%, #16305c 45%, #1a3a6b 100%);
+  background-attachment: fixed;
+}
+
+/* ---------------------------------- card --------------------------------- */
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  position: relative;
+}
+
+/* thin gold seam along the top edge, like a policy binding */
+.login-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--navy) 0%, var(--gold) 50%, var(--navy) 100%);
+}
+
+.card-inner {
+  padding: 44px 40px 32px;
+}
+
+/* --------------------------------- header --------------------------------- */
+
+.login-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+/* signature element: concentric "coverage rings" around the shield,
+   suggesting layered protection rather than a generic badge */
+.icon-circle {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(155deg, var(--navy), var(--slate));
+  color: var(--gold-soft);
+  font-size: 1.5rem;
+  box-shadow:
+    0 0 0 6px rgba(201, 162, 75, 0.12),
+    0 0 0 12px rgba(201, 162, 75, 0.07),
+    0 10px 22px -8px rgba(18, 41, 79, 0.55);
+}
+
+.icon-circle i { position: relative; z-index: 1; }
+
+.login-header h3 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+  margin: 0 0 6px;
+}
+
+.subhead {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ------------------------------ form fields ------------------------------- */
+
+.form-floating-custom {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.form-floating-custom .form-control {
+  width: 100%;
+  height: 54px;
+  padding: 22px 16px 8px 46px;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: var(--mist);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-sm);
+  transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.form-floating-custom .form-control::placeholder {
+  color: transparent;
+}
+
+.form-floating-custom .form-control:focus {
+  outline: none;
+  background: var(--white);
+  border-color: var(--slate);
+  box-shadow: 0 0 0 4px rgba(26, 58, 107, 0.12);
+}
+
+.form-floating-custom .input-icon {
+  position: absolute;
+  left: 17px;
+  top: 21px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  transition: color 0.18s ease;
+  pointer-events: none;
+}
+
+.form-floating-custom .form-control:focus ~ .input-icon {
+  color: var(--slate);
+}
+
+/* floating label: rests as placeholder text, lifts on focus or once filled */
+.form-floating-custom label {
+  position: absolute;
+  left: 46px;
+  top: 17px;
+  font-size: 0.95rem;
+  color: var(--muted);
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform 0.16s ease, top 0.16s ease, color 0.16s ease, font-size 0.16s ease;
+}
+
+.form-floating-custom .form-control:focus ~ label,
+.form-floating-custom .form-control:not(:placeholder-shown) ~ label {
+  top: 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--slate);
+}
+
+/* --------------------------- remember / forgot ---------------------------- */
+
+.form-check-input {
+  border-color: var(--muted);
+  accent-color: var(--slate);
+  cursor: pointer;
+}
+
+.form-check-input:focus {
+  border-color: var(--slate);
+  box-shadow: 0 0 0 3px rgba(26, 58, 107, 0.15);
+}
+
+.form-check-label {
+  color: var(--ink);
+  cursor: pointer;
+}
+
+a[href="#"] {
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+a[href="#"]:hover {
+  border-bottom-color: currentColor !important;
+  color: var(--gold) !important;
+}
+
+/* ---------------------------------- button --------------------------------- */
+
+.btn-login {
+  width: 100%;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--navy) 0%, var(--slate) 100%);
+  color: var(--white);
+  font-size: 0.98rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-login i {
+  transition: transform 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.btn-login:hover{
+    color: var(--navy)  !important;
+    background: transparent !important;
+    border: 2px solid var(--navy)   !important;
+}
+
+.btn-login:hover i {
+  transform: translateX(4px);
+}
+
+.btn-login:active {
+  transform: translateY(1px);
+}
+
+.btn-login:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------- footer --------------------------------- */
+
+.login-footer {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid #e3e9f0;
+  text-align: center;
+  font-size: 0.88rem;
+}
+
+.text-muted-soft {
+  color: var(--muted);
+}
+
+.register-link {
+  color: var(--navy);
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 6px;
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.register-link:hover {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+.register-link i {
+  transition: transform 0.15s ease;
+  display: inline-block;
+}
+
+.register-link:hover i {
+  transform: translateX(3px);
+}
+
+/* encryption note, set in mono for a technical, security-ledger feel */
+.card-inner > .mt-3 {
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--muted);
+}
+
+/* ------------------------------ focus & motion ----------------------------- */
+
+a:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+
+/* ---------------------------------- mobile --------------------------------- */
+
+@media (max-width: 480px) {
+  .card-inner {
+    padding: 34px 24px 26px;
+  }
+
+  .login-header h3 {
+    font-size: 1.3rem;
+  }
+}
